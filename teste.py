@@ -23,20 +23,24 @@ geral = total_meta - total_feito
 
 app = dash.Dash(__name__)
 
-
+# head
 app.layout = html.Div([
-    html.H1('Ranking Geral', style={'textAlign': 'center', 'color': '#000000'}),
+    html.H1('Ranking de Vendas por Vendedor', style={
+        'textAlign': 'center',
+        'color': '#ffffff'
+    }),
 
     html.Div([
         dcc.Graph(id="bar-graph"),
         dcc.Graph(id="pie-chart"),
-    ], style={'display': 'flex', 'flexDirection': 'row'}),  
+    ], style={'display': 'flex', 'flexDirection': 'row'}),  # Layout flexível
 
 ], style={
     'fontFamily': 'Arial, sans-serif',
-    'maxWidth': '1200px',
-    'marginLeft': '200px', 
-    'margin': 'auto',  
+    'maxWidth': '200',
+    'marginLeft': '20px',  # Corrigindo a margem esquerda
+    'backgroundColor': '#000000',
+    'color': '#ffffff'
 })
 
 @app.callback(
@@ -47,18 +51,17 @@ def update_bar_graph(_):
     fig = go.Figure(
         data=go.Bar(
             x=novo_dataframe['Unnamed: 6'],
-            y=novo_dataframe['Unnamed: 4'],  
-            marker_color='#2ca02c',
+            y=novo_dataframe['Unnamed: 4'],  # Ajuste no título do eixo y
+            marker_color='#423c9d',
             orientation='h'
         )
     )
     fig.update_layout(
-        #xaxis_title='Total Vendido',  
+        xaxis_title='Total Vendido',  # Ajuste no título do eixo x
         yaxis={'categoryorder': 'total ascending'},
         plot_bgcolor='#f9f9f9',
         paper_bgcolor='#f9f9f9',
     )
-    fig.update_layout(title='Veja quem mais vendeu no mês de outubro de 2023:')
     fig.update_layout(height=len(novo_dataframe) * 40)
     return fig
 
@@ -71,21 +74,12 @@ def update_pie_chart(_):
         data=go.Pie(
             labels=['Total Realizado', 'Falta para atingir a meta'],
             values=[total_feito, geral],
-            hole=0.4,
+            hole=0.3,
             marker_colors=['#2ca02c', '#d62728'],
-           pull=[0.2, 0])
-    )
-    
-
-    fig.update_layout(
-        #xaxis_title='Total Vendido',  
-        #yaxis={'categoryorder': 'total ascending'},
-        plot_bgcolor='#f9f9f9',
-        paper_bgcolor='#f9f9f9',
+        )
     )
     fig.update_layout(title='Sobre a meta mensal:')
-    fig.update_layout(height=len(novo_dataframe) * 10)
-    
+    fig.update_layout(height=len(novo_dataframe) * 20)
     return fig
 
 if __name__ == '__main__':
