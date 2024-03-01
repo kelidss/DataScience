@@ -1,25 +1,13 @@
-import dash
-from dash import dcc, html, dash_table
-import plotly.graph_objects as go
-import pandas as pd
 import dash_bootstrap_components as dbc
-import base64
+from dash import html, dcc
+import plotly.graph_objects as go
+from data_processing import get_logo, process_data
 
-# Função para obter o logo em base64
-def get_logo():
-    with open('Z:\\Logo Stik\\Logo_Stik_App.png', 'rb') as f:
-        logo_base64 = base64.b64encode(f.read()).decode()
-    return logo_base64
+# Obtendo o logo em base64
+logo_base64 = get_logo()
 
-# Recebendo a planilha
-dataframe = pd.read_excel('X:\\INFORMATICA\\8- TEMP\\Media de Vendas 2.xlsx')
-dataframe = dataframe.dropna()
-
-# Calculando os 10 produtos mais vendidos
-top_produto = dataframe.groupby('Produto')['Qtd1'].sum().reset_index()
-top_produto = top_produto.sort_values(by='Qtd1', ascending=False).head(10)
-
-# Cores para gráficos
+# Processando os dados
+dataframe, top_produto = process_data()
 palette_colors = ['#b90011', '#cb2026', '#dc403c', '#ee5f51', '#ff7f66', '#9A031E']
 
 # Estilo para o fundo
